@@ -1,0 +1,34 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.form-control {
+  width: 50%;
+}
+
+.video-card {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.video-card img {
+  width: 100%;
+  height: auto;
+}
+
+.video-title {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.channel-name {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0.5rem;
+}

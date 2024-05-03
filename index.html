@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Clone</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="download.jpeg" alt="Download Logo" width="30" height="30" class="d-inline-block align-top">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Upload</a>
+          </li>
+        </ul>
+        <form class="form-inline ml-auto">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search-input">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="search-button">Search</button>
+        </form>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Home Page</h1>
+    <!-- First YouTube video -->
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/6KJqEPVfoDs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <!-- Second YouTube video -->
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/6KJqEPVfoDs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <!-- Search results container -->
+    <div class="row mt-5" id="search-results">
+      <!-- Search results will be populated here -->
+    </div>
+  </div>
+
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+      <span class="text-muted">YouTube Clone &copy; 2024</span>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Get the search input and button elements
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+
+    // Add an event listener to the search button
+    searchButton.addEventListener('click', () => {
+        // Get the search query from the input field
+        const query = searchInput.value;
+
+        // Make a request to the YouTube Data API
+        const apiUrl = `https://www.googleapis.com/youtube/v3/search?q=${query}&maxResults=10&part=snippet&key=YOUR_API_KEY`;
+
+        // Fetch the data from the API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Clear previous search results
+                document.getElementById('search-results').innerHTML = '';
+
+                // Loop through the search results and display them
+                data.items.forEach(item => {
+                    const videoId = item.id.videoId;
+                    const title = item.snippet.title;
+                    const thumbnail = item.snippet.thumbnails.medium.url;
+                    const channelTitle = item.snippet.channelTitle;
+
+                    // Create a card for each video
+                    const videoCard = document.createElement('div');
+                    videoCard.classList.add('col-md-4');
+
+                    const cardHtml = `
+                        <div class="card video-card">
+                            <img src="${thumbnail}" class="card-img-top" alt="Video thumbnail">
+                            <div class="card-body">
+                                <h5 class="card-title video-title">${title}</h5>
+                                <p class="card-text channel-name">${channelTitle}</p>
+                                <a href="https://www.youtube.com/watch?v=${videoId}" class="btn btn-primary" target="_blank">Watch</a>
+                            </div>
+                        </div>
+                    `;
+                    videoCard.innerHTML = cardHtml;
+
+                    // Append the card to the container
+                    document.getElementById('search-results').appendChild(videoCard);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    });
+  </script>
+</body>
+</html>
